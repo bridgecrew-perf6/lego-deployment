@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>lego-deployment</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    
+    <name>lego-deployment</name>
+    <description>Aggregation of projects</description>
+
+    <modules>
+        <!-- Aggregation Applications -->
+        <module>aggregation/monolith-application/pom.xml</module>
+        <module>aggregation/payment-sales-application/pom.xml</module>
+
+        <!-- Applications-->
+        <module>modules/create-payment/create-payment-application/pom.xml</module>
+        <module>modules/refund-payment/refund-payment-application/pom.xml</module>
+        <module>modules/notify-payment-situation/notify-payment-situation-application/pom.xml</module>
+
+        <!-- Modules -->
+        <module>modules/create-payment/create-payment-module/pom.xml</module>
+        <module>modules/refund-payment/refund-payment-module/pom.xml</module>
+        <module>modules/notify-payment-situation/notify-payment-situation-module/pom.xml</module>
+    </modules>
+</project>
+

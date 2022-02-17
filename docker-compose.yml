@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+
+  create-payment-app:
+    build:
+      context: ./modules/create-payment/create-payment-application
+      dockerfile: Dockerfile
+    image: create-payment-app:latest
+    container_name: create-payment-app
+    hostname: create-payment-app
+    depends_on:
+      - notify-payment-situation-app
+    environment:
+      - NOTIFICATION_API_URL=http://notify-payment-situation-app:8082
+    ports:
+      - "8080:8080"
+
+  refund-payment-app:
+    build:
+      context: ./modules/refund-payment/refund-payment-application
+      dockerfile: Dockerfile
+    image: refund-payment-app:latest
+    container_name: refund-payment-app
+    hostname: refund-payment-app
+    depends_on:
+      - notify-payment-situation-app
+    environment:
+      - NOTIFICATION_API_URL=http://notify-payment-situation-app:8082
+    ports:
+      - "8081:8081"
+
+  notify-payment-situation-app:
+    build:
+      context: ./modules/notify-payment-situation/notify-payment-situation-application
+      dockerfile: Dockerfile
+    image: notify-payment-situation-app:latest
+    container_name: notify-payment-situation-app
+    hostname: notify-payment-situation-app
+    ports:
+      - "8082:8082"
+
+  monolith-application:
+    build:
+      context: ./aggregation/monolith-application
+      dockerfile: Dockerfile
+    image: monolith-application:latest
+    container_name: monolith-application
+    hostname: monolith-application
+    environment:
+      - NOTIFICATION_API_URL=http://localhost:8083
+    ports:
+      - "8083:8083"
+
+  payment-sales-application:
+    build:
+      context: ./aggregation/payment-sales-application
+      dockerfile: Dockerfile
+    image: payment-sales-application:latest
+    container_name: payment-sales-application
+    hostname: payment-sales-application
+    depends_on:
+      - notify-payment-situation-app
+    environment:
+      - NOTIFICATION_API_URL=http://notify-payment-situation-app:8082
+    ports:
+      - "8084:8084"
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
